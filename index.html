@@ -48,6 +48,9 @@
 				<button class="btn btn-success" ng-click="addSet()" >Add set</button>
 				<button class="btn btn-info btn-xs" ng-click="addExamples()" >Add examples</button>
 				<br/><br/>
+				<span ng-hide="sets.length" >
+					<strong>Start by clicking "Add set", or <button class="btn btn-info" ng-click="addExamples()" >add some example sets now</button>.</strong>
+				</span>
 				<div ng-repeat="set in sets" class="row ascc-set" >
 					<div class="col-md-12" >
 						<h4>Name</h4>
