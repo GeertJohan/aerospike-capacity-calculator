@@ -13,3 +13,7 @@
 .right .github-fork-ribbon {
 	background-color: #333;
 }
+
+.table-nonfluid {
+   width: auto !important;
+}

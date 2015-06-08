@@ -2,7 +2,9 @@ var ascc = angular.module('ascc', ['mgcrea.ngStrap', 'ngNumeraljs']);
 
 ascc.controller('CtrlCalculator', function($scope) {
 	$scope.namespace = {
+		storage: 'device',
 		blockSize: 128,
+		dataInMemory: false,
 	};
 	$scope.sets = [];
 	$scope.addExamples = function() {
@@ -38,6 +40,13 @@ ascc.controller('CtrlCalculator', function($scope) {
 	$scope.deleteSet = function(i) {
 		$scope.sets.splice(i, 1);
 	};
+	$scope.totalNumRecords = function() {
+		var nr = 0;
+		$scope.sets.forEach(function(set) {
+			nr += set.numRecords;
+		});
+		return nr;
+	}
 
 	function newSet() {
 		var set = {
@@ -58,26 +67,33 @@ ascc.controller('CtrlCalculator', function($scope) {
 			}
 			return ns;
 		}
-		set.binsSize = function() {
+		set.binsDeviceSize = function() {
 			var bs = 0;
 			set.bins.forEach(function(bin) {
-				bs += 28;
-				if(bin.type=='integer') {
-					bs += 2 + 8;
-				} else {
-					bs += 5 + bin.size;
-				}
+				bs += calcBinDeviceSize(bin);
 			});
 			return bs;
 		};
-		set.recordSize = function() {
+		set.binsMemorySize = function() {
+			var bs = 0;
+			set.bins.forEach(function(bin) {
+				bs += calcBinMemorySize(bin);
+			});
+			return bs;
+		};
+		set.recordDeviceSize = function() {
 			var rs = 64;
 			rs += set.nameSize();
-			rs += set.binsSize();
+			rs += set.binsDeviceSize();
 			return rs;
 		};
-		set.recordSizeOnDisk = function() {
-			var rs = set.recordSize();
+		set.recordMemorySize = function() {
+			var rs = 2;
+			rs += set.binsMemorySize();
+			return rs;
+		};
+		set.recordDeviceSizeOnDisk = function() {
+			var rs = set.recordDeviceSize();
 			rs = Math.ceil(rs/$scope.namespace.blockSize)*$scope.namespace.blockSize;
 			return rs;
 		}
@@ -100,8 +116,23 @@ ascc.controller('CtrlCalculator', function($scope) {
 		b.sizeUpdate();
 		return b;
 	}
-});
 
-$(function () {
-  $('[data-toggle="tooltip"]').tooltip()
-})
+	function calcBinDeviceSize(bin) {
+		var bs = 28; // general overhead
+		if(bin.type=='integer') {
+			bs += 2 + 8; // integer overhead + data size (64-bit)
+		} else {
+			bs += 5 + bin.size;
+		}
+		return bs;
+	}
+	function calcBinMemorySize(bin) {
+		var bs = 12; // general overhead
+		if(bin.type=='integer') {
+			// integer data completely stored in bin general overhead
+		} else {
+			bs += 5 + bin.size;
+		}
+		return bs;
+	}
+});
