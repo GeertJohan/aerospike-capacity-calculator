@@ -28,6 +28,8 @@ ascc.controller('CtrlCalculator', function($scope) {
 		s2.bins[1].sizeUpdate();
 		s2.addBin();
 		s2.bins[2].name="SecondNumber";
+		s2.numRecordsText = '1.2b';
+		s2.numRecordsUpdate();
 		$scope.sets.push(s2);
 	}
 	$scope.addSet = function() {
