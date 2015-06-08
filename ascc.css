@@ -1,0 +1,15 @@
+
+.ascc-set {
+	border-left: 2px solid grey;
+	margin-bottom: 15px;
+	margin-left: 15px;
+}
+
+[bs-tooltip] {
+	border-bottom: 1px dotted black;
+	cursor: help;
+}
+
+.right .github-fork-ribbon {
+	background-color: #333;
+}
