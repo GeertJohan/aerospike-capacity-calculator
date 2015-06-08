@@ -47,6 +47,27 @@ ascc.controller('CtrlCalculator', function($scope) {
 		});
 		return nr;
 	}
+	$scope.totalRecordDeviceSize = function() {
+		var s = 0;
+		$scope.sets.forEach(function(set) {
+			s += set.recordDeviceSize()*set.numRecords;
+		});
+		return s;
+	};
+	$scope.totalRecordDeviceSizeOnDisk = function() {
+		var s = 0;
+		$scope.sets.forEach(function(set) {
+			s += set.recordDeviceSizeOnDisk()*set.numRecords;
+		});
+		return s;
+	};
+	$scope.totalRecordMemorySize = function() {
+		var ms = 0;
+		$scope.sets.forEach(function(set) {
+			ms += set.numRecords*set.recordMemorySize();
+		});
+		return ms;
+	}
 
 	function newSet() {
 		var set = {
@@ -109,6 +130,7 @@ ascc.controller('CtrlCalculator', function($scope) {
 			name: '',
 			type: 'integer',
 			sizeText: '10',
+			secondaryIndex: false,
 		};
 		b.sizeUpdate = function() {
 			b.size = numeral().unformat(b.sizeText);
