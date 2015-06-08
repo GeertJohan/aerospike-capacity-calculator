@@ -51,7 +51,12 @@
 				<div ng-repeat="set in sets" class="row ascc-set" >
 					<div class="col-md-12" >
 						<h4>Name</h4>
-						<input type="text" ng-model="set.name" > <span ng-show="set.name" >9 + {{set.name.length}} = {{set.nameSize()}} bytes</span><br/>
+						<input type="text" ng-model="set.name" >
+						<span ng-show="set.name" >
+							<span bs-tooltip title="set name overhead" >9</span> +
+							<span bs-tooltip title="length for `{{set.name}}`">{{set.name.length}}</span> =
+							{{set.nameSize()}} bytes
+						</span><br/>
 						<button class="btn btn-danger btn-xs" ng-click="deleteSet($index)" >Delete set</button>
 						<h4>Bins</h4>
 						<button class="btn btn-success btn-sm" ng-click="set.addBin()" >Add bin</button>
@@ -77,7 +82,9 @@
 										</select>
 									</td>
 									<td>
-										<span ng-show="bin.type=='integer'" >8</span>
+										<span ng-show="bin.type=='integer'" >
+											<span bs-tooltip title="64-bit integer" >8</span>
+										</span>
 										<input ng-show="bin.type=='strblob'" ng-model="bin.sizeText" style="width: 80px" ng-change="bin.sizeUpdate()" >
 									</td>
 									<td>
