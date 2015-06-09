@@ -1,13 +1,14 @@
 var ascc = angular.module('ascc', ['mgcrea.ngStrap', 'ngNumeraljs']);
 
+
 ascc.controller('CtrlCalculator', function($scope) {
-	$scope.namespace = {
+	var namespace = $scope.namespace = {
 		storage: 'device',
 		blockSize: 128,
-		dataInMemory: false,
+		dataInMemory: true,
+		sets: [],
 	};
-	$scope.sets = [];
-	$scope.addExamples = function() {
+	$scope.namespace.addExamples = function() {
 		var s1 = newSet();
 		s1.name = "mySet";
 		s1.addBin();
@@ -17,7 +18,7 @@ ascc.controller('CtrlCalculator', function($scope) {
 		s1.bins[1].type='strblob';
 		s1.bins[1].sizeText='16';
 		s1.bins[1].sizeUpdate();
-		$scope.sets.push(s1);
+		$scope.namespace.sets.push(s1);
 
 		var s2 = newSet();
 		s2.name = "largeSet";
@@ -32,38 +33,38 @@ ascc.controller('CtrlCalculator', function($scope) {
 		s2.bins[2].name="SecondNumber";
 		s2.numRecordsText = '1.2b';
 		s2.numRecordsUpdate();
-		$scope.sets.push(s2);
+		$scope.namespace.sets.push(s2);
 	}
-	$scope.addSet = function() {
+	$scope.namespace.addSet = function() {
 		$scope.sets.push(newSet());
 	};
-	$scope.deleteSet = function(i) {
+	$scope.namespace.deleteSet = function(i) {
 		$scope.sets.splice(i, 1);
 	};
-	$scope.totalNumRecords = function() {
+	$scope.namespace.totalNumRecords = function() {
 		var nr = 0;
-		$scope.sets.forEach(function(set) {
+		this.sets.forEach(function(set) {
 			nr += set.numRecords;
 		});
 		return nr;
 	}
-	$scope.totalRecordDeviceSize = function() {
+	$scope.namespace.totalRecordDeviceSize = function() {
 		var s = 0;
-		$scope.sets.forEach(function(set) {
+		this.sets.forEach(function(set) {
 			s += set.recordDeviceSize()*set.numRecords;
 		});
 		return s;
 	};
-	$scope.totalRecordDeviceSizeOnDisk = function() {
+	$scope.namespace.totalRecordDeviceSizeOnDisk = function() {
 		var s = 0;
-		$scope.sets.forEach(function(set) {
+		this.sets.forEach(function(set) {
 			s += set.recordDeviceSizeOnDisk()*set.numRecords;
 		});
 		return s;
 	};
-	$scope.totalRecordMemorySize = function() {
+	$scope.namespace.totalRecordMemorySize = function() {
 		var ms = 0;
-		$scope.sets.forEach(function(set) {
+		this.sets.forEach(function(set) {
 			ms += set.numRecords*set.recordMemorySize();
 		});
 		return ms;
@@ -91,14 +92,24 @@ ascc.controller('CtrlCalculator', function($scope) {
 		set.binsDeviceSize = function() {
 			var bs = 0;
 			set.bins.forEach(function(bin) {
-				bs += calcBinDeviceSize(bin);
+				bs += 28; // general overhead
+				if(bin.type=='integer') {
+					bs += 2 + 8; // integer overhead + data size (64-bit)
+				} else {
+					bs += 5 + bin.size;
+				}
 			});
 			return bs;
 		};
 		set.binsMemorySize = function() {
 			var bs = 0;
 			set.bins.forEach(function(bin) {
-				bs += calcBinMemorySize(bin);
+				bs += 12; // general overhead
+				if(bin.type=='integer') {
+					// integer data completely stored in bin general overhead
+				} else {
+					bs += 5 + bin.size;
+				}
 			});
 			return bs;
 		};
@@ -137,24 +148,5 @@ ascc.controller('CtrlCalculator', function($scope) {
 		};
 		b.sizeUpdate();
 		return b;
-	}
-
-	function calcBinDeviceSize(bin) {
-		var bs = 28; // general overhead
-		if(bin.type=='integer') {
-			bs += 2 + 8; // integer overhead + data size (64-bit)
-		} else {
-			bs += 5 + bin.size;
-		}
-		return bs;
-	}
-	function calcBinMemorySize(bin) {
-		var bs = 12; // general overhead
-		if(bin.type=='integer') {
-			// integer data completely stored in bin general overhead
-		} else {
-			bs += 5 + bin.size;
-		}
-		return bs;
 	}
 });

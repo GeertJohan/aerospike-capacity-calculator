@@ -63,13 +63,13 @@
 
 			<div class="container" >
 				<h3>Sets</h3>
-				<button class="btn btn-success" ng-click="addSet()" >Add set</button>
-				<button class="btn btn-info btn-xs" ng-click="addExamples()" >Add examples</button>
+				<button class="btn btn-success" ng-click="namespace.addSet()" >Add set</button>
+				<button class="btn btn-info btn-xs" ng-click="namespace.addExamples()" >Add examples</button>
 				<br/><br/>
 				<span ng-hide="sets.length" >
-					<strong>Start by clicking "Add set", or <button class="btn btn-info" ng-click="addExamples()" >add some example sets now</button>.</strong>
+					<strong>Start by clicking "Add set", or <button class="btn btn-info" ng-click="namespace.addExamples()" >add some example sets now</button>.</strong>
 				</span>
-				<div ng-repeat="set in sets" class="row ascc-set" >
+				<div ng-repeat="set in namespace.sets" class="row ascc-set" >
 					<div class="col-md-12" >
 						<h4>Set {{$index+1}}<span ng-show="set.name">: {{set.name}}</span></h4>
 						<button class="btn btn-danger btn-xs" ng-click="deleteSet($index)" >Delete set</button>
@@ -178,7 +178,7 @@
 								</tr>
 							</thead>
 							<tbody>
-								<tr ng-repeat="set in sets" >
+								<tr ng-repeat="set in namespace.sets" >
 									<td>{{set.name}}</td>
 									<td>
 										<span bs-tooltip title="record overhead" >64</span> +
@@ -203,8 +203,8 @@
 							<tfoot>
 								<tr>
 									<th colspan='4'></th>
-									<th>{{totalRecordDeviceSize() | numeraljs:'0.[00]b'}}</th>
-									<th>{{totalRecordDeviceSizeOnDisk() | numeraljs:'0.[00]b'}}</th>
+									<th>{{namespace.totalRecordDeviceSize() | numeraljs:'0.[00]b'}}</th>
+									<th>{{namespace.totalRecordDeviceSizeOnDisk() | numeraljs:'0.[00]b'}}</th>
 								</tr>
 							</tfoot>
 						</table>
@@ -225,7 +225,7 @@
 								</tr>
 							</thead>
 							<tbody>
-								<tr ng-repeat="set in sets" >
+								<tr ng-repeat="set in namespace.sets" >
 									<td>{{set.name}}</td>
 									<td>64 * {{set.numRecordsText}} = {{64*set.numRecords | numeraljs:'0.[00]b'}}</td>
 								</tr>
@@ -233,7 +233,7 @@
 							<tfoot>
 								<tr>
 									<th></th>
-									<th>{{64*totalNumRecords() | numeraljs:'0.[00]b'}}</th>
+									<th>{{64*namespace.totalNumRecords() | numeraljs:'0.[00]b'}}</th>
 								</tr>
 							</tfoot>
 						</table>
@@ -253,7 +253,7 @@
 									<th>Avg. mem</th>
 								</tr>
 							</thead>
-							<tbody ng-repeat="set in sets" >
+							<tbody ng-repeat="set in namespace.sets" >
 								<tr ng-repeat="bin in set.bins" ng-if="bin.secondaryIndex" >
 									<td>{{set.name}}.{{bin.name}}</td>
 									<td>
@@ -292,7 +292,7 @@
 								</tr>
 							</thead>
 							<tbody>
-								<tr ng-repeat="set in sets" >
+								<tr ng-repeat="set in namespace.sets" >
 									<td>{{set.name}}</td>
 									<td>
 										<span bs-tooltip title="record overhead" >2</span> +
@@ -310,7 +310,7 @@
 							<tfoot>
 								<tr>
 									<th colspan='3' ></th>
-									<th>{{totalRecordMemorySize() | numeraljs:'0.[00]b'}}</th>
+									<th>{{namespace.totalRecordMemorySize() | numeraljs:'0.[00]b'}}</th>
 								</tr>
 							</tfoot>
 						</table>
