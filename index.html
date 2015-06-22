@@ -66,13 +66,13 @@
 				<button class="btn btn-success" ng-click="namespace.addSet()" >Add set</button>
 				<button class="btn btn-info btn-xs" ng-click="namespace.addExamples()" >Add examples</button>
 				<br/><br/>
-				<span ng-hide="sets.length" >
+				<span ng-hide="namespace.sets.length" >
 					<strong>Start by clicking "Add set", or <button class="btn btn-info" ng-click="namespace.addExamples()" >add some example sets now</button>.</strong>
 				</span>
 				<div ng-repeat="set in namespace.sets" class="row ascc-set" >
 					<div class="col-md-12" >
 						<h4>Set {{$index+1}}<span ng-show="set.name">: {{set.name}}</span></h4>
-						<button class="btn btn-danger btn-xs" ng-click="deleteSet($index)" >Delete set</button>
+						<button class="btn btn-danger btn-xs" ng-click="namespace.deleteSet($index)" >Delete set</button>
 						<table class="table table-nonfluid" >
 							<tr>
 								<td>Name:</td>

@@ -36,10 +36,10 @@ ascc.controller('CtrlCalculator', function($scope) {
 		$scope.namespace.sets.push(s2);
 	}
 	$scope.namespace.addSet = function() {
-		$scope.sets.push(newSet());
+		this.sets.push(newSet());
 	};
 	$scope.namespace.deleteSet = function(i) {
-		$scope.sets.splice(i, 1);
+		this.sets.splice(i, 1);
 	};
 	$scope.namespace.totalNumRecords = function() {
 		var nr = 0;
