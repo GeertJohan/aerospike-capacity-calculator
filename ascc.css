@@ -15,5 +15,10 @@
 }
 
 .table-nonfluid {
-   width: auto !important;
+	width: auto !important;
+}
+
+.question {
+	font-style: italic;
+	color: #333;
 }
